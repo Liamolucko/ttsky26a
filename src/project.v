@@ -5,7 +5,7 @@
 
 `default_nettype none
 
-module tt_um_vga_example(
+module tt_um_liamolucko_vga(
   input  wire [7:0] ui_in,    // Dedicated inputs
   output wire [7:0] uo_out,   // Dedicated outputs
   input  wire [7:0] uio_in,   // IOs: Input path
@@ -47,7 +47,7 @@ module tt_um_vga_example(
     .hpos(pix_x),
     .vpos(pix_y)
   );
-  
+
   wire [9:0] moving_x = pix_x + counter;
 
   // 640 x 480
@@ -70,7 +70,7 @@ module tt_um_vga_example(
       end
       3'b001: begin
         x_coeff = 63;
-        y_coeff = 63 - counter[5:0]; 
+        y_coeff = 63 - counter[5:0];
       end
       3'b010: begin
         x_coeff = 63;
@@ -86,7 +86,7 @@ module tt_um_vga_example(
       end
       3'b101: begin
         x_coeff = -63;
-        y_coeff = counter[5:0] - 63; 
+        y_coeff = counter[5:0] - 63;
       end
       3'b110: begin
         x_coeff = -63;
@@ -105,11 +105,11 @@ module tt_um_vga_example(
 
   wire in_semicircle;
   assign in_semicircle = x_coeff * centred_x + y_coeff * centred_y > 0;
-  
+
   assign R = video_active && (counter[8] ? in_semicircle || centred_y < 0 : in_semicircle && centred_y < 0) ? offset[12:11] : 2'b00;
   assign G = video_active ? offset[14:13] : 2'b00;
   assign B = video_active ? offset[16:15] : 2'b00;
-  
+
   always @(posedge vsync, negedge rst_n) begin
     if (~rst_n) begin
       counter <= 0;
