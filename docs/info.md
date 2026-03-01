@@ -9,12 +9,12 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+Using https://github.com/TinyTapeout/vga-playground/blob/main/src/examples/common/hvsync_generator.v, outputs a VGA signal with a bunch of moving coloured concentric circles.
 
 ## How to test
 
-Explain how to use your project
+It should just output a VGA signal when connected to a TinyVGA peripheral.
 
 ## External hardware
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+https://github.com/mole99/tiny-vga
