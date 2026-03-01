@@ -75,53 +75,7 @@ module tt_um_liamolucko_vga(
   assign centre_dist_sq = centred_x_sq + centred_y_sq;
   assign offset = centre_dist_sq + {counter, 8'b0};
 
-  reg signed [6:0] x_coeff;
-  reg signed [6:0] y_coeff;
-  always_comb begin
-    case (counter[8:6])
-      3'b000: begin
-        x_coeff = {1'b0, counter[5:0]};
-        y_coeff = 63;
-      end
-      3'b001: begin
-        x_coeff = 63;
-        y_coeff = 63 - counter[5:0];
-      end
-      3'b010: begin
-        x_coeff = 63;
-        y_coeff = ~{1'b0, counter[5:0]};
-      end
-      3'b011: begin
-        x_coeff = 62 - counter[5:0];
-        y_coeff = -63;
-      end
-      3'b100: begin
-        x_coeff = -{1'b0, counter[5:0]};
-        y_coeff = -63;
-      end
-      3'b101: begin
-        x_coeff = -63;
-        y_coeff = counter[5:0] - 63;
-      end
-      3'b110: begin
-        x_coeff = -63;
-        y_coeff = counter[5:0];
-      end
-      3'b111: begin
-        x_coeff = counter[5:0] - 62;
-        y_coeff = 63;
-      end
-      default: begin
-        x_coeff = 1;
-        y_coeff = 1;
-      end
-    endcase
-  end
-
-  wire in_semicircle;
-  assign in_semicircle = x_coeff * centred_x + y_coeff * centred_y > 0;
-
-  assign R = video_active && (counter[8] ? in_semicircle || centred_y < 0 : in_semicircle && centred_y < 0) ? offset[12:11] : 2'b00;
+  assign R = video_active ? offset[12:11] : 2'b00;
   assign G = video_active ? offset[14:13] : 2'b00;
   assign B = video_active ? offset[16:15] : 2'b00;
 
