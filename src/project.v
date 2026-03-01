@@ -53,11 +53,26 @@ module tt_um_liamolucko_vga(
   // 640 x 480
   wire signed [9:0] centred_x;
   wire signed [9:0] centred_y;
-  wire [18:0] centre_dist_sq;
-  wire [18:0] offset;
   assign centred_x = pix_x - 320;
   assign centred_y = pix_y - 240;
-  assign centre_dist_sq = centred_x * centred_x + centred_y * centred_y;
+
+  wire signed [9:0] sq_in;
+  wire [16:0] sq_out;
+  reg [16:0] centred_x_sq;
+  reg [16:0] centred_y_sq;
+  assign sq_in = pix_x == 640 ? (pix_y == 524 ? -240 : centred_y + 1) : (pix_x == 799 ? -320 : centred_x + 1);
+  assign sq_out = sq_in * sq_in;
+  always_ff @(posedge clk) begin
+    if (pix_x == 640) begin
+      centred_y_sq <= sq_out;
+    end else begin
+      centred_x_sq <= sq_out;
+    end
+  end
+
+  wire [18:0] centre_dist_sq;
+  wire [18:0] offset;
+  assign centre_dist_sq = centred_x_sq + centred_y_sq;
   assign offset = centre_dist_sq + {counter, 8'b0};
 
   reg signed [6:0] x_coeff;
